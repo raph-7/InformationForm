@@ -1,7 +1,7 @@
 #Name 
 #Date
 #Assignment Title
-#version
+#python 3.7.2
 
 import csv
 from guizero import App, Box, Text, TextBox, PushButton
