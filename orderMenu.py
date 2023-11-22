@@ -81,6 +81,11 @@ class OrderMenuApp:
             writer.writerow(['', '', f'Total Price: {total_price}'])
 
             messagebox.showinfo("Order Confirmation", "Order confirmed!")
+            
+            for entry in self.entry_widgets:
+                entry.delete(0, END)
+                entry.insert(0, "0")
+
 
 
     def display_billing_labels(self, labels):
