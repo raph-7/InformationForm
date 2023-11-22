@@ -1,5 +1,6 @@
 from tkinter import *
 import csv
+from tkinter import messagebox
 
 class OrderMenuApp:
     def __init__(self):
@@ -57,6 +58,29 @@ class OrderMenuApp:
             summary_item_label.pack()
 
             total_label.config(text=f"Total Price: {total_price}")
+            
+        confirm_button = Button(summary_window, text="Confirm Order", command=lambda: self.confirm_order(total_price))
+        confirm_button.pack()
+        
+    def confirm_order(self, total_price):
+        # Get the order details
+        order_details = []
+        for entry, item in zip(self.entry_widgets, self.menu_items):
+            quantity = int(entry.get())
+            item_name = item[0]
+            item_price = float(item[1])
+            total = quantity * item_price
+            order_details.append([item_name, quantity, total])
+
+        # Write the order details to a CSV file
+        order_file = 'order_details.csv'
+        with open(order_file, 'w', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(['Item', 'Quantity', 'Total'])
+            writer.writerows(order_details)
+            writer.writerow(['', '', f'Total Price: {total_price}'])
+
+            messagebox.showinfo("Order Confirmation", "Order confirmed!")
 
 
     def display_billing_labels(self, labels):
