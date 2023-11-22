@@ -28,12 +28,36 @@ class OrderMenuApp:
         billLabel.place(x=70, y=70)
 
     def display_buttons(self):
-        place_order_button = Button(self.window, text="Place Order", width=25, height=3, command=self.window.destroy)
+        place_order_button = Button(self.window, text="Place Order", width=25, height=3, command=self.display_order_summary)
         place_order_button.place(x=580, y=600)
         place_order_button.configure(bg="red")
 
         exit_button = Button(self.window, text="Exit", width=20, command=self.window.destroy)
         exit_button.place(x=600, y=700)
+        
+    def display_order_summary(self):
+        summary_window = Toplevel(self.window)
+        summary_window.title("Order Summary")
+
+        # Calculate the total price
+        total_price = sum([int(entry.get()) * float(item[1]) for entry, item in zip(self.entry_widgets, self.menu_items)])
+
+        # Display the order summary
+        summary_label = Label(summary_window, text="Your Order", font="times 20 bold")
+        summary_label.pack()
+
+        for entry, item, total_label in zip(self.entry_widgets, self.menu_items, self.total_labels):
+            quantity = int(entry.get())
+            item_name = item[0]
+            item_price = float(item[1])
+            total = quantity * item_price
+
+            summary_text = f"{item_name} x {quantity} = {total}"
+            summary_item_label = Label(summary_window, text=summary_text)
+            summary_item_label.pack()
+
+            total_label.config(text=f"Total Price: {total_price}")
+
 
     def display_billing_labels(self, labels):
         entry_values = []
@@ -43,7 +67,7 @@ class OrderMenuApp:
             label.place(x=20, y=120 + (i * 60))
 
             entry = Entry(self.window)
-            entry.insert(0, "")
+            entry.insert(0, "0")
             entry.place(x=20, y=150 + (i * 60))
             entry_values.append(entry)
 
@@ -85,7 +109,7 @@ class OrderMenuApp:
     def display_data_structure(self, data):
         for i, item in enumerate(data):
             if len(item) >= 2:
-                label = Label(self.window, text=f"{item[0]} -  Shs{item[1]}", font="times 18")
+                label = Label(self.window, text=f"{item[0]} - {item[1]}", font="times 18")
                 label.place(x=1100, y=160 + (i * 40))
             else:
                 print(f"Invalid data structure at index {i}: {item}")
