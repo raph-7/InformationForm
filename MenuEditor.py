@@ -1,48 +1,40 @@
 import csv
-import tkinter as tk
+from tkinter import *
 from tkinter import messagebox
 
-def save_data():
-    # Get the data from the entry fields
-    data = []
-    for i in range(5):
-        row = []
-        for j in range(5):
-            value = entry_fields[i][j].get()
-            row.append(value)
-        data.append(row)
+def write_to_csv():
+    item = item_entry.get()
+    price = price_entry.get()
 
-    # Writing the data to a CSV file
-    with open('menu.csv', 'w', newline='') as csvfile:
-        csvwriter = csv.writer(csvfile)
-        csvwriter.writerows(data)
+    # Prepare the data for the CSV
+    data = [[item, price]]
 
-    # Show a success message
-    messagebox.showinfo("Success", "Data saved successfully!")
+    # Write the data to a CSV file
+    with open('menu.csv', 'a', newline='') as csvfile:
+        writer = csv.writer(csvfile)
+        writer.writerows(data)
+        
+        # Clear the entry fields once submit button has been clicked
+    item_entry.delete(0, END)
+    price_entry.delete(0, END)
 
-# Create the main window
-window = tk.Tk()
-window.title("Menu Editor")
+    messagebox.showinfo("Success", "Menu Updated!")
 
-# Create a labels for each row
-labels = ["Appetizers", "Entrees", "Desserts", "Beverages", "Sides"]
-for i, label_text in enumerate(labels):
-        label = tk.Label(window, text=label_text)
-        label.grid(row=i, column=0)
+# main window
+root = Tk()
 
-# Create entry fields for data input
-entry_fields = []
-for i in range(5):
-    row = []
-    for j in range(1, 6):
-        entry = tk.Entry(window)
-        entry.grid(row=i, column=j)
-        row.append(entry)
-    entry_fields.append(row)
+# entry fields
+Label(root, text="Enter Food Name:").pack()
+item_entry = Entry(root)
+item_entry.pack()
 
-# Create a button to save the data
-save_button = tk.Button(window, text="Save", command=save_data)
-save_button.grid(row=5, columnspan=6)
+Label(root, text="Enter Food Price:").pack()
+price_entry = Entry(root)
+price_entry.pack()
 
-# Start the Tkinter event loop
-window.mainloop()
+# submit button
+submit_button = Button(root, text="Submit", command=write_to_csv)
+submit_button.pack()
+
+# Start the main loop
+root.mainloop()
